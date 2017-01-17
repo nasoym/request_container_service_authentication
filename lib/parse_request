@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+function parse_request() {
+  read -r request_method request_uri request_http_version
+
+  request_header_lines=""
+  while read -r line; do 
+    line="$(echo "$line" | tr -d '\r')"
+    request_header_lines+="$line
+"
+    [[ "$line" =~ ^$ ]] && { break; } 
+  done
+ 
+  content_length="$(get_header_value "content-length" <<<"$request_header_lines")"
+  if [[ -n "$content_length" ]] && [[ "$content_length" -gt "0" ]];then
+    read -r -d '' -n "$content_length" request_content
+  fi
+  : ${request_content:=""}
+
+  request_path="${request_uri/%\?*/}"
+  if [[ "${request_uri}" =~ \? ]]; then
+    request_queries="${request_uri#*\?}"
+    for I in $(tr '&' '\n' <<<"$request_queries"); do
+      query_key=${I//\=*/}
+      [[ "${I}" =~ = ]] && query_value="$(urldecode ${I//*\=/})"
+      declare -gx "query_${query_key}"="$query_value"
+    done
+  fi
+}
+
