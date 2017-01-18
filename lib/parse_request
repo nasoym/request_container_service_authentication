@@ -6,14 +6,11 @@ function parse_request() {
   request_header_lines=""
   while read -r line; do 
     header_line="$(echo "$line" | tr -d '\r')"
-    echo "request headers line: ${header_line}" >&2
     request_header_lines+="$header_line
 "
     [[ "$header_line" =~ ^$ ]] && { break; } 
   done
 
-  echo "request headers: ${request_header_lines}" >&2
- 
   content_length="$(get_header_value "content-length" <<<"$request_header_lines")"
   if [[ -n "$content_length" ]] && [[ "$content_length" -gt "0" ]];then
     read -r -d '' -n "$content_length" request_content

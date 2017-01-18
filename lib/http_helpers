@@ -17,16 +17,8 @@ function echo_response_status_line() {
 
 function get_header_value() { 
   header_key="$1"
-  echo "get header key: $header_key" >&2
-  input="$(cat -)"
-  echo "input: >$input<" >&2
-  # echo "$input" | sed -e "/^${header_key}/i!d" >&2
-
-  result="$( echo "$input" \
-  | sed -e "/^${header_key}/I!d" \
-  -e "s/^${header_key}: \(.*\)\$/\1/gi")"
-  echo "result for header_key: $header_key : >$result<" >&2
-  echo "$result"
+  sed -e "/^${header_key}/I!d" \
+      -e "s/^${header_key}: \(.*\)\$/\1/gi"
 }
 
 function urldecode() {

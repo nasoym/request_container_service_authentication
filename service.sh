@@ -11,10 +11,9 @@ source lib/parse_request
 
 parse_request
 
-  log "request: ${SOCAT_PEERADDR}:${SOCAT_PEERPORT} ${request_method} ${request_uri}"
+log "request: ${SOCAT_PEERADDR}:${SOCAT_PEERPORT} ${request_method} ${request_uri}"
 
 authorization="$(get_header_value "authorization" <<<"$request_header_lines")"
-echo "got authorization: >$authorization" >&2
 authorization_verify "$authorization"
 
 echo -e "${request_method} ${request_uri} ${request_http_version}\n${request_header_lines}${request_content}" \
