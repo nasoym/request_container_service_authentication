@@ -2,7 +2,7 @@ FROM alpine:edge
 MAINTAINER Sinan Goo
 
 RUN apk update && apk upgrade
-RUN apk --no-cache add socat bash curl sed
+RUN apk --no-cache add socat bash curl sed jq openssl
 
 WORKDIR /socat_server
 
