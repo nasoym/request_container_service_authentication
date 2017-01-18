@@ -20,12 +20,12 @@ function get_header_value() {
   echo "get header key: $header_key" >&2
   input="$(cat -)"
   echo "input: >$input<" >&2
-  echo "$input" | sed -e "/^${header_key}/i!d" >&2
+  # echo "$input" | sed -e "/^${header_key}/i!d" >&2
 
   result="$( echo "$input" \
-  | sed -e "/^${header_key}/i!d" \
+  | sed -e "/^${header_key}/I!d" \
   -e "s/^${header_key}: \(.*\)\$/\1/gi")"
-  echo "result: >$result<" >&2
+  echo "result for header_key: $header_key : >$result<" >&2
   echo "$result"
 }
 
